@@ -1,0 +1,112 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0"
+    android:gravity="left"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".TipCalc" >
+
+    <TextView
+        android:id="@+id/tvAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:paddingTop="50dp"
+        android:text="@string/tvAmount"
+        android:textIsSelectable="false"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:digits="0123456789."
+        android:imeOptions="actionDone"
+        android:hint="@string/etAmount_hint"
+        android:gravity="right"
+        android:paddingTop="50dp"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/b10"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTip"
+        android:layout_toLeftOf="@+id/b15"
+        android:text="@string/b10" />
+
+    <Button
+        android:id="@+id/b15"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTip"
+        android:layout_toLeftOf="@+id/b20"
+        android:text="@string/b15" />
+
+    <TextView
+        android:id="@+id/tvTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvAmount"
+        android:layout_below="@+id/etAmount"
+        android:text="@string/tvTip"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/b15"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/tvTotal"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/b20"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTipAmount"
+        android:layout_toLeftOf="@+id/etAmount"
+        android:text="@string/b20" />
+
+    <TextView
+        android:id="@+id/tvSum"
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTipAmount"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tvTotal"
+        android:layout_centerVertical="false"
+        android:text="@string/tvSum"
+        android:textSize="30sp"
+        android:gravity="right"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/tvTipAmount"
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/etAmount"
+        android:text="@string/tvTipAmount"
+        android:gravity="right"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+
+</RelativeLayout>
