@@ -2,83 +2,148 @@ package com.yakdere.tipcalc;
 
 import java.text.DecimalFormat;
 
+import kankan.wheel.widget.OnWheelChangedListener;
+import kankan.wheel.widget.OnWheelScrollListener;
+import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.NumericWheelAdapter;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TipCalc extends Activity {
-	//Constructors
-	private final double TIP_TEN = 0.10;
-	private final double TIP_FIF = 0.15;
-	private final double TIP_TWE = 0.20;
+	boolean wheelScrolled;
+	int tip_rate;
 
 	//View Components
 	EditText input;
 	TextView tip_amount, sum;
-	Button b10;
-	Button b15;
-	Button b20;
+	WheelView wvtip_rate;
+	
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tipcalc);
-
+		
+		wheelScrolled = false;
+		tip_rate = 0;
+		
 		input = (EditText) findViewById(R.id.etAmount);
+		input.addTextChangedListener(new TextWatcher(){
+
+			@Override
+			public void afterTextChanged(Editable s) {	
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int arg1,
+					int arg2, int arg3) {	
+			}
+			@Override
+			public void onTextChanged(CharSequence s, int arg1, int arg2,
+					int arg3) {
+				double amount;
+				try {
+					amount = Double.parseDouble(s.toString());
+					Log.i("Text Watcher", "Text changed");
+					if (wheelScrolled) {
+						setTipandTotal(tip_rate, amount);
+					}	
+				} catch (NumberFormatException e) {
+					amount = 0.0;
+				}
+			}
+			
+			
+		});
+		/*
+		if ( input.getText().toString() != null && input.getText().toString().length() > 0) {
+			amount = Double.parseDouble(input.getText().toString());
+			Toast.makeText(this, "Your check is: "+amount, Toast.LENGTH_SHORT).show();
+		} else {
+			amount = 0.0;
+			Toast.makeText(this, "Please enter your check value.", Toast.LENGTH_SHORT).show();
+		}
+		*/
 		tip_amount = (TextView) findViewById(R.id.tvTipAmount);
 		sum = (TextView) findViewById(R.id.tvSum);
-		b10 = (Button) findViewById(R.id.b10);
-		b15 = (Button) findViewById(R.id.b15);
-		b20 = (Button) findViewById(R.id.b20);
-
-		b10.setOnClickListener(this.listener);
-		b15.setOnClickListener(this.listener);
-		b20.setOnClickListener(this.listener);
-
+		wvtip_rate = (WheelView) findViewById(R.id.wvTipRate);
+		wvtip_rate.setViewAdapter(new NumericWheelAdapter(this, 0, 99));
+		wvtip_rate.setCurrentItem((int)(Math.random() * 10));
+		wvtip_rate.addChangingListener(changedListener);
+		wvtip_rate.addScrollingListener(scrolledListener);
+		wvtip_rate.setCyclic(true);
+		wvtip_rate.setInterpolator(new AnticipateOvershootInterpolator());
+		
 		showSoftKeyboard(input);
 	}
-
-	public void showSoftKeyboard(View view){
+	
+	OnWheelScrollListener scrolledListener = new OnWheelScrollListener() {
+		
+		@Override
+		public void onScrollingStarted(WheelView wheel) {
+			wheelScrolled = true;
+		}
+		
+		@Override
+		public void onScrollingFinished(WheelView wheel) {
+			wheelScrolled = false;
+			tip_rate = wvtip_rate.getCurrentItem();
+			Log.i("Scroll Listener", "tip rate is" +tip_rate);	
+			if (input.getText().toString() != null) {
+				setTipandTotal(tip_rate, Double.valueOf(input.getText().toString()));
+			}
+			//setTipandTotal(tip_rate);
+		}
+	};
+	OnWheelChangedListener changedListener = new OnWheelChangedListener() {
+		
+		@Override
+		public void onChanged(WheelView wheel, int oldValue, int newValue) {
+			if(!wheelScrolled) {
+				tip_rate = wvtip_rate.getCurrentItem();
+				Log.i("Changed Listener", "tip rate is" +tip_rate);	
+				//setTipandTotal(tip_rate);
+			}
+			
+		}
+	};
+		public void showSoftKeyboard(View view){
 		if(view.requestFocus()){
 			InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);	
 		}
 	}
-
-	private OnClickListener listener = new OnClickListener() {
-		public void onClick(View v) {
-			switch(v.getId()) {
-			case R.id.b10: 
-				setTipandTotal(TIP_TEN);
-				break;
-			case R.id.b15:
-				setTipandTotal(TIP_FIF);
-				break;
-			case R.id.b20:
-				setTipandTotal(TIP_TWE);
-				break;
-			}
+		public void hideSoftKeyboard(View v) {
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		}
-	};
 
-	private void setTipandTotal(double t) {
-		Double tip = t*Double.valueOf(input.getText().toString());
-		tip_amount.setText(String.valueOf(new DecimalFormat("##.##").format(tip)));
-		sum.setText('$'+String.valueOf(new DecimalFormat("##.##").format(tip+Double.valueOf(input.getText().toString()))));
+	
+	private void setTipandTotal(int t, double v) {
+		Log.i("Set Tip and Total Method", "invoked");
+		Double rate;
+		try { 
+			rate =  (double) (t * 0.01);
+			Double tip = rate * v;
+			tip_amount.setText("$ " + String.valueOf(new DecimalFormat("##.##").format(tip)));
+			sum.setText('$'+String.valueOf(new DecimalFormat("##.##").format(tip + v)));
+		} catch (NumberFormatException e) {
+			rate = 0.0;
+			Log.e("Error", e.toString());
+		}
 		hideSoftKeyboard(input);
-	}
-
-	private void hideSoftKeyboard(View v) {
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
 
 	@Override
