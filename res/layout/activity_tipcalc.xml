@@ -12,76 +12,90 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TipCalc" >
 
-    <TextView
-        android:id="@+id/tvAmount"
-        android:layout_width="wrap_content"
+    <kankan.wheel.widget.WheelView
+        android:id="@+id/wvTipRate"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="false"
-        android:text="@string/tvAmount"
-        android:textIsSelectable="false"
-        android:textSize="30sp" />
+        android:layout_above="@+id/tvTipAmount"
+        android:layout_below="@+id/tvTipPercent"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/etAmount"
-        android:layout_width="120sp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
+        android:layout_below="@+id/tvAmount"
+        android:layout_centerHorizontal="true"
         android:digits="0123456789."
         android:ems="10"
-        android:gravity="right"
         android:hint="@string/etAmount_hint"
         android:imeOptions="actionDone"
         android:inputType="numberDecimal"
+        android:gravity="center"
         android:textSize="30sp"
         android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/tvTip"
+        android:id="@+id/tvTipPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etAmount"
-        android:layout_toLeftOf="@+id/tvTipAmount"
-        android:text="@string/tvTip"
+        android:layout_centerHorizontal="true"
+        android:text="Tip Percent (%)"
         android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tvTipAmount"
-        android:layout_width="120sp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/etAmount"
+        android:layout_above="@+id/tvSum"
+        android:layout_alignTop="@+id/tvTip"
+        android:layout_centerHorizontal="true"
         android:gravity="right"
         android:text="@string/tvTipAmount"
         android:textSize="30sp"
         android:textStyle="italic" />
 
-    <kankan.wheel.widget.WheelView
-        android:id="@+id/wvTipRate"
-        android:layout_width="46dp"
+    <TextView
+        android:id="@+id/tvSum"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tvAmount" />
+        android:layout_alignBaseline="@+id/tvTotal"
+        android:layout_alignBottom="@+id/tvTotal"
+        android:layout_centerHorizontal="true"
+        android:gravity="right"
+        android:text="@string/tvSum"
+        android:textSize="30sp"
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTip"
-        android:layout_toLeftOf="@+id/tvTipAmount"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvTipPercent"
+        android:layout_marginTop="128dp"
         android:text="@string/tvTotal"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/tvSum"
-        android:layout_width="120sp"
+        android:id="@+id/tvTip"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvTipAmount"
-        android:gravity="right"
-        android:text="@string/tvSum"
-        android:textSize="30sp"
-        android:textStyle="bold|italic" />
+        android:layout_above="@+id/tvSum"
+        android:layout_alignLeft="@+id/tvTotal"
+        android:text="@string/tvTip"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/tvAmount"
+        android:textIsSelectable="false"
+        android:textSize="30sp" />
 
 </RelativeLayout>

@@ -8,8 +8,11 @@ import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.NumericWheelAdapter;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,7 +39,8 @@ public class TipCalc extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tipcalc);
-		
+		ActionBar bar = getActionBar();
+		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#575191")));
 		wheelScrolled = false;
 		tip_rate = 0;
 		
@@ -53,6 +57,7 @@ public class TipCalc extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int arg1, int arg2,
 					int arg3) {
+				hideSoftKeyboard(input);
 				double amount;
 				try {
 					amount = Double.parseDouble(s.toString());
@@ -104,7 +109,6 @@ public class TipCalc extends Activity {
 			if (input.getText().toString() != null) {
 				setTipandTotal(tip_rate, Double.valueOf(input.getText().toString()));
 			}
-			//setTipandTotal(tip_rate);
 		}
 	};
 	OnWheelChangedListener changedListener = new OnWheelChangedListener() {
@@ -114,7 +118,6 @@ public class TipCalc extends Activity {
 			if(!wheelScrolled) {
 				tip_rate = wvtip_rate.getCurrentItem();
 				Log.i("Changed Listener", "tip rate is" +tip_rate);	
-				//setTipandTotal(tip_rate);
 			}
 			
 		}
